@@ -43,11 +43,23 @@ def register():
             jsonify(message="Missing user info", error="Bad request"), 400
         user = db_manager().create_user(data["email"], data["username"], data["password"], current_time)
         token = jwt.encode(
-            "user_id": user["user_id"],
-            "email": user["email"],
-            "username": user["username"],
-            "created_at": user["created_at"]
+            {
+                "user_id": user["user_id"],
+                "email": user["email"],
+                "username": user["username"],
+                "created_at": user["created_at"]
+            },
+            SECRET_KEY,
+            algorithm="HS256",
         )
+        return jsonify(token=token), 200
+    except Exception as e:
+        return jsonify(message="Something went wrong", error=str(e)), 500
+
+@app.route("/users/login", methods=["POST"])
+def login():
+    try:
+        
     except Exception as e:
 
 
